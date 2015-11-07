@@ -138,8 +138,27 @@ var SignUpForm = React.createClass({
 var RankForm = React.createClass({
   getInitialState: function () {
     return {
-      header: 'Now, which of these areas do you want to improve the most?'
+      rank1: 'notSelected',
+      rank2: 'notSelected',
+      rank3: 'notSelected',
+      currentSelectedArea: null,
+      currentSelectedRank: null,
+      header: 'Now, in order, which of these areas do you want to improve the most?'
     };
+  },
+  selectArea: function(event) {
+    event.preventDefault();
+    console.log(event.target.id);
+    this.setState({
+      currentSelectedArea:event.target.id
+    });
+  },
+  selectRank: function(event) {
+    event.preventDefault();
+    console.log(event.target.id);
+    var newState = {};
+    newState[event.target.id] = this.state.currentSelectedArea;
+    this.setState(newState);
   },
   allowDropStatus: function (event) {
     event.preventDefault();
@@ -157,39 +176,52 @@ var RankForm = React.createClass({
     event.stopPropagation();
     return false;
   },
-  submitForm: function () {
+  submitForm: function (event) {
+    event.preventDefault();
     var rank1 = document.getElementById('rank1').value;
     var rank2 = document.getElementById('rank2').value;
     var rank3 = document.getElementById('rank3').value;
   },
   render: function () {
+    console.log('Rank 1: ' + this.state.rank1);
+    console.log('Rank 2: ' + this.state.rank2);
+    console.log('Rank 3: ' + this.state.rank3);
+
+    var newButtons = {
+      notSelected: '',
+      financial: <button onClick={this.selectRank} id="rank1"  draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">FINANCIAL</button>,
+      personal: <button onClick={this.selectRank} id="rank1"  draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PERSONAL</button>,
+      professional: <button onClick={this.selectRank} id="rank1"  draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PROFESSIONAL</button>
+  };
+
     return (
       <div>
         <p className='heading'>{this.state.header}</p>
 
         <div className="form-body">
-          <button id="financial" draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">FINANCIAL</button>
-          <button id="personal" draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PERSONAL</button>
-          <button id="professional" draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PROFESSIONAL</button>
+          <button id="financial" onClick={this.selectArea} draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">FINANCIAL</button>
+          <button id="personal" onClick={this.selectArea} draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PERSONAL</button>
+          <button id="professional" onClick={this.selectArea} draggable="true" ondragstart={this.dragInitialize} className="button-imp button-imp-block">PROFESSIONAL</button>
 
           <div className="tab-content">
             <div id="signup">
               <h1></h1>
               <form action="/" method="post">
                 <div className="field-wrap">
-                  <div id="rank1" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
-
+                  <div onClick={this.selectRank} id="rank1" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
+                    {newButtons[this.state.rank1]}
                   </div>
                 </div>
 
                 <div className="field-wrap">
-                  <div id="rank2" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
-
+                  <div onClick={this.selectRank}  id="rank2" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
+                    {newButtons[this.state.rank2]}
                   </div>
                 </div>
 
                 <div className="field-wrap">
-                  <div id="rank3" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
+                  <div onClick={this.selectRank}  id="rank3" className="dropped" ondrop={this.dropComplete} ondragover={this.allowDropStatus}>
+                    {newButtons[this.state.rank3]}
                   </div>
                 </div>
                 <button className="next-button next-button-block" onClick={this.submitForm}>next</button>
@@ -205,5 +237,6 @@ var RankForm = React.createClass({
     )
   }
 });
+
 
 ReactDOM.render(<RankForm />, document.getElementById('SignUp'));
