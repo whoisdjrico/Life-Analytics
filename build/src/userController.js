@@ -3,9 +3,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
-var userConroller = {};
-userConroller.createUser = createUser;
-userConroller.postTasks = postTasks;
+var userController = {};
+userController.createUser = createUser;
+userController.verifyUser = verifyUser;
+userController.updateUserData = updateUserData;
 
 function createUser (req, res, next) {
   var user = {
@@ -44,7 +45,7 @@ function createUser (req, res, next) {
   });
 }
 
-function verifyUser (req, res) {
+function verifyUser (req, res, next) {
   var credentials = req.body;
   User.find(req.body, function (err, userData) {
     if (err) {
@@ -54,8 +55,8 @@ function verifyUser (req, res) {
   });
 }
 
-function updateUserData () {
+function updateUserData (req, res, next) {
 
 }
 
-module.exports = taskController;
+module.exports = userController;

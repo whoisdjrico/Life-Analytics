@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var $ = require('jquery');
+var User = require('./dummyUser.js');
 
 console.log('app.jsx is working!');
 
@@ -29,7 +30,16 @@ var SignInPage = React.createClass({
   },
   createUser: function(event) {
     event.preventDefault();
-    console.log('User Created!');
+
+    User.firstName = event.target.form.firstName.value;
+    User.lastName = event.target.form.lastName.value;
+    User.email = event.target.form.emailAddress.value;
+    User.password = event.target.form.password.value;
+
+    $.post('http://localhost:3000/signup',User,function(result){
+      console.log(result);
+    });
+
   },
   render: function() {
     var signUp = <SignUpForm signUpStatus={this.state.signUpStatus} createUser = {this.createUser}/>;
@@ -118,7 +128,7 @@ var SignUpForm = React.createClass({
               </label>
               <input type="password" name='password' required autoComplete="off" />
             </div>
-            <button type="submit" onClick={this.createUser} className="button button-block">Get Started</button>
+            <button type="submit" onClick={this.props.createUser} className="button button-block">Get Started</button>
             </form>
         </div>
     )

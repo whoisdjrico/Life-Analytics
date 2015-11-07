@@ -6,7 +6,12 @@ var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var app = express();
+var cors = require('cors');
 var userController = require('./../userController');
+var async = require('async');
+
+app.use(cors());
+
 
 mongoose.connect('mongodb://localhost/life-analytics');
 mongoose.connection.once('open', function () {
